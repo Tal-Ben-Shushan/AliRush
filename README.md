@@ -32,7 +32,12 @@ AliRush Game
 ## Game Images
 
 <p float="left">
-  <img src="./assets/images/homePage.jpeg" width="300" />
+  <img src="./assets/images/home.jpeg" width="300" />
   <img src="./assets/images/gamePage.jpeg" width="300" />
+</p>
+
+<p float="left">
+  <img src="./assets/images/failGame.jpeg" width="300" />
+  <img src="./assets/images/succesGame.jpeg" width="300" />
 </p>
 
