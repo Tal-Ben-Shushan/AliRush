@@ -1,11 +1,13 @@
 import { ThemedText } from "@/components/themed-text";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 interface GameTurnEndProps {
   currentGroup: number;
   turnScore: number;
   totalGroupScore: number;
-  chipBgActive: string;
+  correctWords: string[];
+  failedWords: string[];
   onProceedToNextGroup: () => void;
 }
 
@@ -13,71 +15,171 @@ export function GameTurnEnd({
   currentGroup,
   turnScore,
   totalGroupScore,
-  chipBgActive,
+  correctWords,
+  failedWords,
   onProceedToNextGroup,
 }: GameTurnEndProps) {
   return (
-    <View style={styles.centerContent}>
-      <ThemedText type="title" style={{ marginBottom: 20 }}>
-        Time's up!
-      </ThemedText>
-
-      <View style={styles.scoreBreakdown}>
-        <ThemedText style={styles.infoText}>
-          Group {currentGroup + 1} scored{" "}
-          <ThemedText style={{ color: turnScore >= 0 ? "#2ecc71" : "#e74c3c", fontWeight: "bold" }}>
-            {turnScore}
-          </ThemedText>{" "}
-          points this turn.
-        </ThemedText>
-        <ThemedText style={styles.totalText}>Total score: {totalGroupScore}</ThemedText>
+    <View style={styles.container}>
+      {/* Header section */}
+      <View style={styles.header}>
+        <ThemedText style={styles.mainTitle}>Round Over!</ThemedText>
+        <ThemedText style={styles.subTitle}>Team {currentGroup + 1}'s Turn</ThemedText>
       </View>
 
+      {/* Points Earned Card */}
+      <View style={styles.pointsCard}>
+        <ThemedText style={styles.pointsLabel}>POINTS EARNED</ThemedText>
+        <ThemedText style={[styles.pointsValue, { color: turnScore >= 0 ? "#2ecc71" : "#e74c3c" }]}>
+          {turnScore > 0 ? `+${turnScore}` : turnScore}
+        </ThemedText>
+      </View>
+
+      <ScrollView style={styles.listsContainer} showsVerticalScrollIndicator={false}>
+        {/* Correct Words */}
+        {correctWords.length > 0 && (
+          <View style={styles.listSection}>
+            <View style={styles.listHeader}>
+              <MaterialCommunityIcons name="check-circle" size={20} color="#2ecc71" />
+              <ThemedText style={styles.listTitle}>
+                Guessed Correctly ({correctWords.length})
+              </ThemedText>
+            </View>
+            {correctWords.map((word, index) => (
+              <View key={index} style={[styles.wordCard, styles.correctWordCard]}>
+                <ThemedText style={[styles.wordText, styles.correctWordText]}>{word}</ThemedText>
+                <MaterialCommunityIcons name="check" size={16} color="#2ecc71" />
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Failed Words */}
+        {failedWords.length > 0 && (
+          <View style={styles.listSection}>
+            <View style={styles.listHeader}>
+              <MaterialCommunityIcons name="close-circle" size={20} color="#e74c3c" />
+              <ThemedText style={styles.listTitle}>Failed Words ({failedWords.length})</ThemedText>
+            </View>
+            {failedWords.map((word, index) => (
+              <View key={index} style={[styles.wordCard, styles.failedWordCard]}>
+                <ThemedText style={[styles.wordText, styles.failedWordText]}>{word}</ThemedText>
+                <MaterialCommunityIcons name="close" size={16} color="#e74c3c" />
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Footer Button */}
       <TouchableOpacity
-        style={[styles.actionButton, { backgroundColor: chipBgActive }]}
+        style={styles.nextButton}
         onPress={onProceedToNextGroup}
+        activeOpacity={0.8}
       >
-        <ThemedText style={styles.actionButtonText}>Continue</ThemedText>
+        <ThemedText style={styles.nextButtonText}>NEXT TEAM'S TURN</ThemedText>
+        <MaterialIcons name="arrow-forward" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  centerContent: {
+  container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
+    paddingTop: 20,
+    justifyContent: "space-between",
   },
-  scoreBreakdown: {
-    padding: 30,
-    backgroundColor: "rgba(0,0,0,0.05)",
-    borderRadius: 20,
+  header: {
     alignItems: "center",
-    marginBottom: 40,
-  },
-  infoText: {
     marginBottom: 20,
-    fontSize: 20,
-    textAlign: "center",
   },
-  totalText: {
-    fontSize: 24,
-    fontWeight: "bold",
+  mainTitle: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: "#e74c3c",
+    letterSpacing: -0.5,
   },
-  actionButton: {
-    paddingHorizontal: 40,
-    paddingVertical: 15,
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+  subTitle: {
+    fontSize: 16,
+    color: "#888",
+    marginTop: 4,
+    fontWeight: "600",
   },
-  actionButtonText: {
+  pointsCard: {
+    backgroundColor: "#1e1e24", // dark navy/grey matches screenshot
+    borderRadius: 20,
+    paddingVertical: 24,
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  pointsLabel: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: "#888",
+    letterSpacing: 1.5,
+    marginBottom: 8,
+  },
+  pointsValue: {
+    fontSize: 56,
+    fontWeight: "900",
+  },
+  listsContainer: {
+    flex: 1,
+  },
+  listSection: {
+    marginBottom: 24,
+  },
+  listHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    gap: 8,
+  },
+  listTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  wordCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  correctWordCard: {
+    backgroundColor: "rgba(46, 204, 113, 0.15)",
+  },
+  failedWordCard: {
+    backgroundColor: "rgba(231, 76, 60, 0.15)",
+  },
+  wordText: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  correctWordText: {
+    color: "#2ecc71",
+  },
+  failedWordText: {
+    color: "#e74c3c",
+  },
+  nextButton: {
+    flexDirection: "row",
+    backgroundColor: "#e74c3c",
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 12,
+    gap: 8,
+  },
+  nextButtonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "800",
   },
 });

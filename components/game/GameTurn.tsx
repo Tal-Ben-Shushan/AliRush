@@ -13,6 +13,8 @@ interface TurnProps {
   timeLeft: number;
   turnScore: number;
   currentWord: string;
+  currentWords: string[];
+  currentWordIndex: number;
   pan: Animated.ValueXY;
   panResponderHandlers: any;
   swipeHistory: ("left" | "right")[];
@@ -33,6 +35,8 @@ export function GameTurn({
   timeLeft,
   turnScore,
   currentWord,
+  currentWords,
+  currentWordIndex,
   pan,
   panResponderHandlers,
   swipeHistory,
@@ -70,15 +74,31 @@ export function GameTurn({
         />
       )}
 
-      {gameState === GameState.TurnEnd && (
-        <GameTurnEnd
-          currentGroup={currentGroup}
-          turnScore={turnScore}
-          totalGroupScore={groupScores[currentGroup]}
-          chipBgActive={chipBgActive}
-          onProceedToNextGroup={onProceedToNextGroup}
-        />
-      )}
+      {gameState === GameState.TurnEnd &&
+        (() => {
+          const startIndex = currentWordIndex - swipeHistory.length;
+          const correctWords: string[] = [];
+          const failedWords: string[] = [];
+
+          swipeHistory.forEach((swipe, i) => {
+            const word = currentWords[startIndex + i];
+            if (word) {
+              if (swipe === "right") correctWords.push(word);
+              else failedWords.push(word);
+            }
+          });
+
+          return (
+            <GameTurnEnd
+              currentGroup={currentGroup}
+              turnScore={turnScore}
+              totalGroupScore={groupScores[currentGroup]}
+              correctWords={correctWords}
+              failedWords={failedWords}
+              onProceedToNextGroup={onProceedToNextGroup}
+            />
+          );
+        })()}
 
       {gameState === GameState.GameOver && (
         <GameOver

@@ -79,6 +79,8 @@ export default function HomeScreen() {
           pan={pan}
           panResponderHandlers={panResponder.panHandlers}
           swipeHistory={swipeHistory}
+          currentWords={currentWords}
+          currentWordIndex={currentWordIndex}
           isDark={isDark}
           chipBorderColor={chipBorderColor}
           chipBgActive={chipBgActive}
