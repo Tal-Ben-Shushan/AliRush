@@ -130,17 +130,17 @@ export function GamePlaying() {
           <View style={[styles.iconCircle, { backgroundColor: "rgba(231, 76, 60, 0.15)" }]}>
             <MaterialIcons name="keyboard-double-arrow-left" size={32} color="#e74c3c" />
           </View>
-          <ThemedText style={[styles.hintSub, { color: "#e74c3c", marginTop: 8 }]}>SWIPE LEFT</ThemedText>
+          {/* <ThemedText style={[styles.hintSub, { color: "#e74c3c", marginTop: 8 }]}>SWIPE LEFT</ThemedText> */}
           <ThemedText style={{ fontSize: 10, fontWeight: "900", color: "#e74c3c", opacity: 0.8 }}>SKIP</ThemedText>
         </Animated.View>
 
         <View style={[styles.hintBox, { alignItems: "center" }]}>{/* spacer */}</View>
 
-        <Animated.View style={[styles.hintBox, { alignItems: "flex-end", opacity: rightHintOpacity, transform: [{ scale: rightHintScale }] }]}>
+        <Animated.View style={[styles.hintBox, { opacity: rightHintOpacity, transform: [{ scale: rightHintScale }] }]}>
           <View style={[styles.iconCircle, { backgroundColor: "rgba(46, 204, 113, 0.15)" }]}>
             <MaterialIcons name="keyboard-double-arrow-right" size={32} color="#2ecc71" />
           </View>
-          <ThemedText style={[styles.hintSub, { color: "#2ecc71", marginTop: 8 }]}>SWIPE RIGHT</ThemedText>
+          {/* <ThemedText style={[styles.hintSub, { color: "#2ecc71", marginTop: 8 }]}>SWIPE</ThemedText> */}
           <ThemedText style={{ fontSize: 10, fontWeight: "900", color: "#2ecc71", opacity: 0.8 }}>SUCCESS</ThemedText>
         </Animated.View>
       </View>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     position: "absolute",
-    bottom: 40,
+    bottom: 80,
     paddingHorizontal: 40,
     zIndex: 10,
   },
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   undoContainer: {
     position: "absolute",
-    bottom: 30,
+    bottom: 10,
     width: "100%",
     alignItems: "center",
   },
